@@ -4,10 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Ionicons from 'react-native-vector-icons/FontAwesome'
+import {loginResponse, User} from './src/types/user.types'
+import { useContext } from 'react';
+import { AuthContext } from './src/contexts/AuthContext';
 
 
 
-const SignUp = ({navigation}:any) => {
+const SignUp = ({ navigation }: any) => {
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [email, setEmail] = useState('')
@@ -15,28 +18,34 @@ const SignUp = ({navigation}:any) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 
+  const auth = useContext(AuthContext);
+  
+  if(!auth) return null
+  const { setUser } = auth
 
-  const handleLogin = async(email:string,password:string) => {
+  const handleLogin = async (email: string, password: string) => {
     try {
-      const response = await fetch('http://10.0.2.2:5000/api/v1/auth/login',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
+      const response = await fetch('http://10.0.2.2:5000/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({email:email, password:password})
+        body: JSON.stringify({ email: email, password: password })
       })
 
-      if(!response.ok){
+      if (!response.ok) {
         throw new Error('Invalid credentials');
       }
 
-      const data = await response.json()
+      const data:loginResponse = await response.json()
       console.log('Response JSON:', data);
+
+      setUser(data.user)
       JSON.stringify(data)
       Alert.alert(`Login Successful username:${data.user.username}`)
       setIsLoggedIn(true)
 
-      navigation.navigate('Feed',{username:data.user.name});
+      navigation.replace('Feed');
     } catch (error) {
       Alert.alert(`error occurred ${error}`)
     }
@@ -62,51 +71,51 @@ const SignUp = ({navigation}:any) => {
         </Text>
       </View>
 
-      
-        <LinearGradient
-          colors={['rgba(255,255,255,0.03)', 'rgba(255,255,255,0.03)']}
-          style={[styles.gradientBox, { top: isKeyboardVisible ? '10%' : '22.5%' }]}
-        >
-          <View style={styles.Container}>
-            <Text style={styles.HeadingText}>Email or Phone</Text>
-            <View style={styles.InputHolder}>
-              <Icon name='mail-outline' size={30} color='#fff' style={{ marginLeft: '2%' }}></Icon>
-              <TextInput placeholder='Enter your email' placeholderTextColor={'#ffffff'} 
-              onChangeText={(email) => setEmail(email)}
-              style={styles.inputText} 
-              />
-            </View>
-          </View>
-          <View style={styles.Container}>
-            <Text style={styles.HeadingText}>Password</Text>
-            <View style={styles.InputHolder}>
-              <Icon name='lock-closed-outline' size={30} color='#fff' style={{ marginLeft: '2%' }}></Icon>
-              <TextInput placeholder='Enter your password' placeholderTextColor={'#ffffff'} secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)} 
-              style={styles.inputText} />
-            </View>
-            <TouchableOpacity>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.loginBtn}
-          onPress={() => {handleLogin(email,password)}}
-          >
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity>
-          <View style={styles.newContainer}>
-            <View style={{ flex: 1, height: 1, backgroundColor: '#ccc' }}></View>
-            <Text style={{ marginLeft: '2%', marginRight: '2%', color: '#666' }}>or continue with</Text>
-            <View style={{ flex: 1, height: 1, backgroundColor: '#ccc' }}></View>
-          </View>
-          <View style={styles.iconsContainer}>
-            <TouchableOpacity><Ionicons name="google" size={40} color="#DB4437" /></TouchableOpacity>     // Google "G"
-            <TouchableOpacity><Ionicons name="apple" size={40} color="#f7f4f4" /></TouchableOpacity>         // Apple logo
-            <TouchableOpacity><Ionicons name="facebook" size={40} color="#4267B2" /></TouchableOpacity>   // Facebook "f"
-          </View>
 
-        </LinearGradient>
-   
+      <LinearGradient
+        colors={['rgba(255,255,255,0.03)', 'rgba(255,255,255,0.03)']}
+        style={[styles.gradientBox, { top: isKeyboardVisible ? '10%' : '22.5%' }]}
+      >
+        <View style={styles.Container}>
+          <Text style={styles.HeadingText}>Email or Phone</Text>
+          <View style={styles.InputHolder}>
+            <Icon name='mail-outline' size={30} color='#fff' style={{ marginLeft: '2%' }}></Icon>
+            <TextInput placeholder='Enter your email' placeholderTextColor={'#ffffff'}
+              onChangeText={(email) => setEmail(email)}
+              style={styles.inputText}
+            />
+          </View>
+        </View>
+        <View style={styles.Container}>
+          <Text style={styles.HeadingText}>Password</Text>
+          <View style={styles.InputHolder}>
+            <Icon name='lock-closed-outline' size={30} color='#fff' style={{ marginLeft: '2%' }}></Icon>
+            <TextInput placeholder='Enter your password' placeholderTextColor={'#ffffff'} secureTextEntry={true}
+              onChangeText={(password) => setPassword(password)}
+              style={styles.inputText} />
+          </View>
+          <TouchableOpacity>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.loginBtn}
+          onPress={() => { handleLogin(email, password) }}
+        >
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+        <View style={styles.newContainer}>
+          <View style={{ flex: 1, height: 1, backgroundColor: '#ccc' }}></View>
+          <Text style={{ marginLeft: '2%', marginRight: '2%', color: '#666' }}>or continue with</Text>
+          <View style={{ flex: 1, height: 1, backgroundColor: '#ccc' }}></View>
+        </View>
+        <View style={styles.iconsContainer}>
+          <TouchableOpacity><Ionicons name="google" size={40} color="#DB4437" /></TouchableOpacity>     // Google "G"
+          <TouchableOpacity><Ionicons name="apple" size={40} color="#f7f4f4" /></TouchableOpacity>         // Apple logo
+          <TouchableOpacity><Ionicons name="facebook" size={40} color="#4267B2" /></TouchableOpacity>   // Facebook "f"
+        </View>
+
+      </LinearGradient>
+
 
 
     </SafeAreaView>

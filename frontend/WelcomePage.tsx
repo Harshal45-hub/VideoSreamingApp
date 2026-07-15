@@ -20,7 +20,7 @@ const WelcomePage = ({navigation}:any) => {
                     <Text style={styles.submainText}>and exclusive originals</Text>
                 </View>
                 <TouchableOpacity style={styles.getStartesBtn} 
-                onPress={() => navigation.navigate('SignUp') }
+                onPress={() => navigation.replace('SignUp') }
                 >
                     <Text style={styles.btnText}>Get Started</Text>
                 </TouchableOpacity>

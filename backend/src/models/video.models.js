@@ -24,7 +24,7 @@ const videoSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     }
-})
+},{timetamps:true})
 
 const videoModel = mongoose.model("video", videoSchema)
 

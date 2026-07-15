@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
         default:"user",
         required: [true, "role is required"]
     }
-})
+},{timestamps:true})
 
 
 userSchema.pre("save", async function (next) {
