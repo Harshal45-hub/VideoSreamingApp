@@ -45,7 +45,7 @@ const SignUp = ({ navigation }: any) => {
       Alert.alert(`Login Successful username:${data.user.username}`)
       setIsLoggedIn(true)
 
-      navigation.replace('Feed');
+      navigation.replace('MainTabNavigation');
     } catch (error) {
       Alert.alert(`error occurred ${error}`)
     }
