@@ -4,7 +4,7 @@ const uploadVideo = require('../services/storage.services')
 const videoSchema = new mongoose.Schema({
     uri: {
         type: String,
-        required: [true, 'uri is required'],
+        required: [true, "uri is required"],
         unique: true
     },
     posterImage: {
@@ -20,6 +20,16 @@ const videoSchema = new mongoose.Schema({
         type: String,
         required: [true, "cast is required"]
     }],
+    genre: {
+        type: String,
+        required: [true,"genre is required"],
+        enum: ['Romantic', 'Sci-fi', 'Thriller', 'Horror', 'Drama', 'Animation', 'Action'],
+        default: 'Action'
+    },
+    description: {
+        type: String,
+        required: [true, "Description is required"]
+    },
     uploader: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"

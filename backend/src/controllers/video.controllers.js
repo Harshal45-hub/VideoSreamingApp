@@ -8,9 +8,9 @@ const insertVideo = async (req, res) => {
     const uri = req.files?.video?.[0];
     const posterImage = req.files?.thumbnail?.[0];
 
-    const {title, cast} = req.body
+    const {title, cast, genre, description} = req.body
 
-    if (!uri || !posterImage || !title || !cast) {
+    if (!uri || !posterImage || !title || !cast || !genre || !description) {
         return res.status(400).json({
             message: "please fill all details"
         })
@@ -23,13 +23,34 @@ const insertVideo = async (req, res) => {
         uri: videoUrl.url,
         posterImage: posterImageUrl.url,
         title: req.body.title,
-        cast: req.body.cast
+        cast: req.body.cast,
+        genre: req.body.genre,
+        description: req.body.description
     })
 
     return res.status(201).json({
-        message: "video uploaded successfully"
+        message: "video uploaded successfully",
+        createVideo
     })
 
 }
 
-module.exports = { insertVideo }
+const getVideos = async(req, res) => {
+
+    try {
+        const videos = await videoModel.find()
+
+        return res.status(200).json({
+            message: 'videos fetched successfully',
+            videos: videos
+        })
+
+    } catch (error) {
+        res.status(500).json({ 
+            message: err.message 
+        });
+    }
+
+}
+
+module.exports = { insertVideo, getVideos }

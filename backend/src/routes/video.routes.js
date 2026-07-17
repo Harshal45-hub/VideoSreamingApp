@@ -10,6 +10,7 @@ const upload = multer({storage: multer.memoryStorage()})
 
 router.post('/uploadVideo', authMiddleware.authAdmin, upload.fields([{name:"video", maxCount:1}, {name: "thumbnail", maxCount:1}]), videoController.insertVideo )
 router.post('/watchlist/:videoId', authMiddleware.authUser, watchListController.addWatchList)
+router.get('/', authMiddleware.authUser, videoController.getVideos)
 
 module.exports = router
 
