@@ -3,7 +3,9 @@ const mongoose = require('mongoose')
 const watchListSchema = new mongoose.Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "user",
+        required:true,
+        unique:true
     },
     favourite: [{
         type: mongoose.Schema.Types.ObjectId,

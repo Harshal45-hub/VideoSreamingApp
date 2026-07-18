@@ -25,6 +25,11 @@ const SignUp = ({ navigation }: any) => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
+
+      if(email ==="" || password ===""){
+        throw new Error("Enter email or password")
+      }
+
       const response = await fetch('http://10.0.2.2:5000/api/v1/auth/login', {
         method: 'POST',
         headers: {
